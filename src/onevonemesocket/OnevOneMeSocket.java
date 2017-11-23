@@ -17,7 +17,8 @@ import java.util.logging.Logger;
 public class OnevOneMeSocket {
     
     public static final int PORT_NUM=9000;
-    public static final String address = "localhost";
+    public static InetAddress address;
+    public static DatagramSocket socket;
 
     /**
      * @param args the command line arguments
@@ -29,7 +30,13 @@ public class OnevOneMeSocket {
      * 
      */
     public static void main(String[] args) throws Exception {
-        ServerSocket socket = new ServerSocket(PORT_NUM);
+        address = InetAddress.getByName("localhost");
+        socket = new DatagramSocket(PORT_NUM);
+        byte[] sendData = new byte[1024];
+        byte[] recvData = new byte[1024];
+        while(1<2){
+            Player player = new Player(socket);
+        }
     }
     
     //Game Object
@@ -44,19 +51,22 @@ public class OnevOneMeSocket {
     class Player extends Thread {
         BufferedReader input;
         PrintWriter output;
+        DatagramChannel channel;
         
         //idk how much gas i got left maybe this will work at somepoint [insert::rngGOd.prayer]
         private Player opponent;
         int Pnumber;
-        Socket socket;
+        DatagramSocket socket;
         
-        public Player(Socket socket, int Pnumber) {
+        public Player(DatagramSocket socket) {
             this.socket = socket;
-            this.Pnumber = Pnumber;
             try {
-                input = new BufferedReader(
-                        new InputStreamReader(socket.getInputStream()));
+                /*input = new BufferedReader(
+                        new InputStreamReader(socket.getInputStream(new InputStreamReader(System.in))));
                 output = new PrintWriter(socket.getOutputStream(), true);
+                */
+                socket = new DatagramSocket(PORT_NUM);
+                channel = socket.getChannel();
                 //displays 1st couple of communicatay
                 output.println("WELCOME FAGGOt " + socket);
                 output.println("Waiting on the other SCRUB...");
